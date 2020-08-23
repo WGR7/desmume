@@ -96,8 +96,8 @@ GameInfo gameInfo;
 NDSSystem nds;
 CFIRMWARE *extFirmwareObj = NULL;
 
-std::vector<int> memReadBreakPoints;
-std::vector<int> memWriteBreakPoints;
+std::vector<u32> memReadBreakPoints;
+std::vector<u32> memWriteBreakPoints;
 
 using std::min;
 using std::max;
@@ -3291,6 +3291,36 @@ void NDS_GetCPULoadAverage(u32 &outLoadAvgARM9, u32 &outLoadAvgARM7)
 		calcLoad = calcLoad/8 + sample*7/8;
 	}
 	outLoadAvgARM7 = std::min<u32>( 100, std::max<u32>(0, (u32)(calcLoad*100/1120380)) );
+}
+
+void NDS_AddBreakPoint(armcpu_t *aCpu, u32 addr) {
+	aCpu->breakPoints.push_back(addr);
+}
+
+void NDS_RemoveBreakPoint(armcpu_t* aCpu, int id) {
+	if (aCpu->breakPoints.size() > id) {
+		aCpu->breakPoints.erase(aCpu->breakPoints.begin() + id);
+	}
+}
+
+void NDS_AddReadBreakPoint(u32 addr) {
+	memReadBreakPoints.push_back(addr);
+}
+
+void NDS_RemoveReadBreakPoint(int id) {
+	if (memReadBreakPoints.size() > id) {
+		memReadBreakPoints.erase(memReadBreakPoints.begin() + id);
+	}
+}
+
+void NDS_AddWriteBreakPoint(u32 addr) {
+	memWriteBreakPoints.push_back(addr);
+}
+
+void NDS_RemoveWriteBreakPoint(int id) {
+	if (memWriteBreakPoints.size() > id) {
+		memWriteBreakPoints.erase(memWriteBreakPoints.begin() + id);
+	}
 }
 
 //these templates needed to be instantiated manually

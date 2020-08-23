@@ -31,6 +31,7 @@
 
 class CFIRMWARE;
 class EMUFILE;
+class armcpu_t;
 
 template<typename Type>
 struct buttonstruct {
@@ -201,6 +202,13 @@ void NDS_RescheduleGXFIFO(u32 cost);
 void NDS_RescheduleDMA();
 void NDS_RescheduleReadSlot1(int procnum, int size);
 void NDS_RescheduleTimers();
+
+void NDS_AddBreakPoint(armcpu_t *aCpu, u32 addr);
+void NDS_RemoveBreakPoint(armcpu_t* aCpu, int id);
+void NDS_AddReadBreakPoint(u32 addr);
+void NDS_RemoveReadBreakPoint(int id);
+void NDS_AddWriteBreakPoint(u32 addr);
+void NDS_RemoveWriteBreakPoint(int id);
 
 enum ENSATA_HANDSHAKE
 {
@@ -405,8 +413,8 @@ typedef struct TSCalInfo
 
 extern GameInfo gameInfo;
 
-extern std::vector<int> memReadBreakPoints;
-extern std::vector<int> memWriteBreakPoints;
+extern std::vector<u32> memReadBreakPoints;
+extern std::vector<u32> memWriteBreakPoints;
 
 
 struct UserButtons : buttonstruct<bool>

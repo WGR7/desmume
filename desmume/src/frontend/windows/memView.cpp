@@ -680,7 +680,7 @@ INT_PTR CALLBACK MemView_DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
 		{
 			char str[16];
 			GetDlgItemText(hDlg, IDC_MEMBPTARG, str, 16);
-			memReadBreakPoints.push_back(strtol(str, NULL, 16));
+			NDS_AddReadBreakPoint(strtol(str, NULL, 16));
 			wnd->Refresh();
 			wnd->SetFocus();
 			InvalidateRect(hDlg, NULL, FALSE);
@@ -690,25 +690,21 @@ INT_PTR CALLBACK MemView_DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
 		{
 			char str[16];
 			GetDlgItemText(hDlg, IDC_MEMBPTARG, str, 16);
-			memWriteBreakPoints.push_back(strtol(str, NULL, 16));
+			NDS_AddWriteBreakPoint(strtol(str, NULL, 16));
 			wnd->Refresh();
 			wnd->SetFocus();
 			InvalidateRect(hDlg, NULL, FALSE);
 			return 1;
 		}
 		case IDC_DELREADBP: {
-			if (RBPOffs < memReadBreakPoints.size()) {
-				memReadBreakPoints.erase(memReadBreakPoints.begin() + RBPOffs);
-			}
+			NDS_RemoveReadBreakPoint(RBPOffs);
 			wnd->Refresh();
 			wnd->SetFocus();
 			InvalidateRect(hDlg, NULL, FALSE);
 			return 1;
 		}
 		case IDC_DELWRITEBP: {
-			if (WBPOffs < memWriteBreakPoints.size()) {
-				memWriteBreakPoints.erase(memWriteBreakPoints.begin() + WBPOffs);
-			}
+			NDS_RemoveWriteBreakPoint(WBPOffs);
 			wnd->Refresh();
 			wnd->SetFocus();
 			InvalidateRect(hDlg, NULL, FALSE);
